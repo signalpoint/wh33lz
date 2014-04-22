@@ -42,7 +42,7 @@ Drupal.settings.cache.views.expiration = 3600;
 drupalgap.settings.title = 'DrupalGap';
  
 // App Front Page
-drupalgap.settings.front = 'dashboard';
+drupalgap.settings.front = 'welcome';
 
 // Theme
 drupalgap.settings.theme = 'easystreet3';
@@ -75,11 +75,11 @@ drupalgap.settings.loader = {
 
 /** Contributed Modules - www/app/modules **/
 
-//Drupal.modules.contrib['example'] = {};
+Drupal.modules.contrib['addressfield'] = {};
 
 /** Custom Modules - www/app/modules/custom **/
 
-//Drupal.modules.custom['my_module'] = {};
+Drupal.modules.custom['wh33lz'] = {};
 
 /***************************************|
  * Menus - http://drupalgap.org/node/85 |
@@ -178,12 +178,12 @@ drupalgap.settings.blocks.easystreet3 = {
     title:{}
   },
   navigation:{
-    user_menu_anonymous:{
+    /*user_menu_anonymous:{
       roles:{
         value:['anonymous user'],
         mode:'include',
       }
-    },
+    },*/
     user_menu_authenticated:{
       roles:{
         value:['authenticated user'],
@@ -192,20 +192,19 @@ drupalgap.settings.blocks.easystreet3 = {
     }
   },
   sub_navigation:{
-    main_menu:{
+    /*main_menu:{
       roles:{
         value:['administrator'],
         mode:'include',
       }
     },
-    primary_local_tasks:{},
+    primary_local_tasks:{},*/
   },
   content:{
     messages: {},
     main:{}
   },
   footer:{
-    powered_by:{}
   }
 };
 

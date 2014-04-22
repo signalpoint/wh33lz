@@ -31,6 +31,11 @@ function wh33lz_welcome_page() {
       content.welcome = {
         markup: '<p>Please login to get started!</p>'
       };
+      content['login_button'] = {
+        theme: 'button_link',
+        text: 'Login',
+        path: 'user/login'
+      };
     }
     else {
       content.dealerships = {
@@ -104,7 +109,11 @@ function wh33lz_screens_page() {
  * The row callback to render a single row.
  */
 function wh33lz_screens_page_row(view, row) {
-  return l(row.title, 'node/' + row.nid);
+  return l(
+    '<h2>' + row.title + '</h2>' +
+    '<p>' + theme('addressfield', row) + '</p>',
+    'node/' + row.nid
+  );
 }
 
 /**
