@@ -43,9 +43,10 @@ drupalgap.settings.title = 'DrupalGap';
  
 // App Front Page
 drupalgap.settings.front = 'welcome';
+//drupalgap.settings.front = 'node/3';
 
 // Theme
-drupalgap.settings.theme = 'easystreet3';
+drupalgap.settings.theme = 'wh33lz_theme';
 
 // Logo
 drupalgap.settings.logo = 'themes/easystreet3/images/drupalgap.jpg';
@@ -76,6 +77,7 @@ drupalgap.settings.loader = {
 /** Contributed Modules - www/app/modules **/
 
 Drupal.modules.contrib['addressfield'] = {};
+Drupal.modules.contrib['link'] = {};
 
 /** Custom Modules - www/app/modules/custom **/
 
@@ -136,35 +138,7 @@ drupalgap.settings.menus['user_menu_authenticated'] = {
 
 // Main Menu
 drupalgap.settings.menus['main_menu'] = {
-  links:[
-    {
-      title:'Content',
-      path:'node',
-      options:{
-        attributes:{
-          'data-icon':'star'
-        }
-      }
-    },
-    {
-      title:'Taxonomy',
-      path:'taxonomy/vocabularies',
-      options:{
-        attributes:{
-          'data-icon':'grid'
-        }
-      }
-    },
-    {
-      title:'Users',
-      path:'user-listing',
-      options:{
-        attributes:{
-          'data-icon':'info'
-        }
-      }
-    }
-  ]
+  links:[ ]
 };
 
 /****************************************|
@@ -172,39 +146,18 @@ drupalgap.settings.menus['main_menu'] = {
  ****************************************/
 drupalgap.settings.blocks = {}; // Do not remove this line.
 
-// Easy Street 3 Theme Blocks
-drupalgap.settings.blocks.easystreet3 = {
-  header:{
-    title:{}
+// The wh33lz_theme blocks.
+drupalgap.settings.blocks.wh33lz_theme = {
+  header: {
+    title: {}
   },
-  navigation:{
-    /*user_menu_anonymous:{
-      roles:{
-        value:['anonymous user'],
-        mode:'include',
-      }
-    },*/
-    user_menu_authenticated:{
-      roles:{
-        value:['authenticated user'],
-        mode:'include',
-      }
-    }
+  navigation: {
+    main_menu: {}
   },
-  sub_navigation:{
-    /*main_menu:{
-      roles:{
-        value:['administrator'],
-        mode:'include',
-      }
-    },
-    primary_local_tasks:{},*/
+  content: {
+    main: {}
   },
-  content:{
-    messages: {},
-    main:{}
-  },
-  footer:{
+  footer: {
   }
 };
 
