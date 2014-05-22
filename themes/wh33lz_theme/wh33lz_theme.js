@@ -25,6 +25,13 @@ function wh33lz_theme_info() {
       'data-role': 'navbar'
     }
   };
+  
+  // Content Region
+  theme.regions['sidebar'] = {
+    attributes: {
+      'data-role': 'content'
+    }
+  };
 
   // Content Region
   theme.regions['content'] = {

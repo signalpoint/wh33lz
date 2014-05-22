@@ -1,5 +1,21 @@
+/*.screen_content {
+  float: left;
+  width: 75%;
+}
 .screen_sidebar_right {
   float: right;
   width: 25%;
+}
+*/
+.screen_content {
+  margin-top: 2em;
+}
+
+.ui-listview>li h2 {
+  margin-left: 1em;
+}
+
+.ui-footer-fixed {
+  padding-bottom: 2.3em;
 }
 

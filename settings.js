@@ -1,3 +1,5 @@
+window.localStorage.clear();
+
 /* Specify DrupalGap Mobile Application Settings Here */
 
 /****************************************|
@@ -42,8 +44,9 @@ Drupal.settings.cache.views.expiration = 3600;
 drupalgap.settings.title = 'DrupalGap';
  
 // App Front Page
-drupalgap.settings.front = 'welcome';
-//drupalgap.settings.front = 'node/3';
+//drupalgap.settings.front = 'welcome';
+drupalgap.settings.front = 'node/3';
+//drupalgap.settings.front = 'node/4';
 
 // Theme
 drupalgap.settings.theme = 'wh33lz_theme';
@@ -78,6 +81,8 @@ drupalgap.settings.loader = {
 
 Drupal.modules.contrib['addressfield'] = {};
 Drupal.modules.contrib['link'] = {};
+Drupal.modules.contrib['services_menu'] = {};
+Drupal.modules.contrib['og_menu'] = {};
 
 /** Custom Modules - www/app/modules/custom **/
 
@@ -154,10 +159,14 @@ drupalgap.settings.blocks.wh33lz_theme = {
   navigation: {
     main_menu: {}
   },
+  sidebar: {
+    /*og_single_menu_block: { }*/
+  },
   content: {
     main: {}
   },
   footer: {
+    dummy: {}
   }
 };
 
@@ -202,6 +211,20 @@ drupalgap.settings.menus.regions['header'] = {
   ]
 };
 
+drupalgap.settings.menus.regions['footer'] = {  
+  links:[
+    {
+      title: '&nbsp;',
+      path: 'welcome',
+      options: {"attributes":{"data-icon":"gear", "class":"ui-btn-right"}},
+      pages: {
+        value: ['screen/*'],
+        mode: 'include'
+      }
+    }
+  ]
+};
+
 /*********|
  * Camera |
  **********/
@@ -217,7 +240,7 @@ drupalgap.settings.camera = {
 //   PhoneGap 3.0.0 and above note, you must install a plugin to see console
 //   log messages. See the 'Debug console' section here:
 //   http://docs.phonegap.com/en/edge/guide_cli_index.md.html#The%20Command-line%20Interface
-Drupal.settings.debug = false; /* Set to true to see console.log debug
+Drupal.settings.debug = true; /* Set to true to see console.log debug
                                   information. Set to false when publishing
                                   app! */
 

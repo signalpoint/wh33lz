@@ -18,17 +18,26 @@ function wh33lz_menu() {
   try {
     var items = {};
     items['welcome'] = {
-      title: 'Welcome',
+      title: 'TrendX.tv',
       page_callback: 'wh33lz_welcome_page'
+    };
+    items['help'] = {
+      title: 'Help',
+      page_callback: 'wh33lz_help_page'
     };
     items['dealerships'] = {
       title: 'Dealerships',
       page_callback: 'wh33lz_dealerships_page'
-    }
+    };
     items['screen/%'] = {
-      title: 'Screen',
+      title: 'Witt Lincoln - San Diego',
       page_callback: 'wh33lz_screen_page',
       pageshow: 'wh33lz_screen_pageshow',
+      page_arguments: [1]
+    };
+    items['videos/%'] = {
+      title: 'Videos',
+      page_callback: 'wh33lz_videos_page',
       page_arguments: [1]
     }
     return items;
@@ -37,12 +46,20 @@ function wh33lz_menu() {
 }
 
 /**
+ * BLOCKS
+ */
+
+/**
  * Implements hook_block_info().
  */
 function wh33lz_block_info() {
   var blocks = {
     dealer: {
       delta: 'dealer',
+      module: 'wh33lz'
+    },
+    dummy: {
+      delta: 'dummy',
       module: 'wh33lz'
     }
   };
@@ -54,11 +71,57 @@ function wh33lz_block_info() {
  */
 function wh33lz_block_view(delta) {
   var content = '';
-  if (delta == 'dealer') {
-    content = '<h2>Hi, ' + Drupal.user.name + '</h2>';
+  switch (delta) {
+    case 'dealer':
+      content = '<h2>Hi, ' + Drupal.user.name + '</h2>';
+      break;
+    case 'dummy':
+      content = '&nbsp;';
+      break;
   }
   return content;
 }
+
+/**
+ * PAGES
+ */
+ 
+/**
+ * The page callback to display the view.
+ */
+function wh33lz_videos_page(nid) {
+  var content = {};
+  content['wh33lz_videos'] = {
+    theme: 'view',
+    format: 'ul',
+    path: 'drupalgap/videos/' + nid,
+    row_callback: 'wh33lz_videos_page_row',
+    empty_callback: 'wh33lz_videos_page_row_empty',
+    attributes: {
+      id: 'wh33lz_videos_view'
+    }
+  };
+  return content;
+}
+
+/**
+ * 
+ */
+function wh33lz_videos_page_row(view, row) {
+  var image = {
+    path: row.image
+  };
+  var image_html = theme('image', image);
+  return l(image_html + '<h2>' + row.title + '</h2>', 'node/' + row.nid);
+}
+
+/**
+ *
+ */
+function wh33lz_videos_page_row_empty(view) {
+  return 'Sorry, no videos were found.';
+}
+
 
 /**
  *
@@ -67,13 +130,21 @@ function wh33lz_welcome_page() {
   try {
     var content = {};
     if (Drupal.user.uid == 0) {
-      content.welcome = {
-        markup: '<p>Please login to get started!</p>'
-      };
       content['login_button'] = {
         theme: 'button_link',
         text: 'Login',
-        path: 'user/login'
+        path: 'user/login',
+        attributes: {
+          'data-icon': 'cloud'
+        }
+      };
+      content['help_button'] = {
+        theme: 'button_link',
+        text: 'Help',
+        path: 'help',
+        attributes: {
+          'data-icon': 'info'
+        }
       };
     }
     else {
@@ -113,6 +184,20 @@ function wh33lz_screens_row(view, row) {
  */
 function wh33lz_screens_empty(view) {
   return 'Sorry, no screens were found.';
+}
+
+/**
+ *
+ */
+function wh33lz_help_page() {
+  try {
+    var content = {};
+    content.topics = {
+      markup: '<p>Help Topics...</p>'
+    };
+    return content;
+  }
+  catch (error) { console.log('wh33lz_help_page - ' + error); }
 }
 
 /**
@@ -160,7 +245,11 @@ function wh33lz_screen_start(nid) {
  */
 function wh33lz_screen_page(nid) {
   try {
-    return '<div id="' + wh33lz_screen_page_container_id(nid) + '"></div>';
+    var content = {};
+    content['container'] = {
+      markup: '<div id="' + wh33lz_screen_page_container_id(nid) + '"></div>'
+    };
+    return content;
   }
   catch (error) { console.log('wh33lz_screen_page - ' + error); }
 }
@@ -174,8 +263,34 @@ function wh33lz_screen_pageshow(nid) {
         success: function(node) {
           dpm(node);
           var html = '';
+          // Determined organic group node id.
+          var og_nid = node.og_group_ref[node.language][0]['target_id'];
+          // Show videos button.
+          html += theme('button_link', { text: 'Videos', path: 'videos/' + og_nid});
+          // Show car listing in content area.
+          var car_list = theme('jqm_item_list', { items: [], attributes: { id: 'car_listing_' + nid }});
+          html += '<div class="screen_content">' + car_list + '</div>';
+          views_datasource_get_view_result('drupalgap/cars/' + og_nid, {
+              success: function(data) {
+                dpm(data);
+                if (data.nodes.length > 0) {
+                  var items = [];
+                  $.each(data.nodes, function(index, object){
+                      var node = object.node;
+                      var image = {
+                        path: node.image
+                      };
+                      var image_html = theme('image', image);
+                      var title_html = '<h2>' + node.title + '</h2>';
+                      var item = l(image_html + title_html, 'node/' + node.nid);
+                      items.push(item);
+                  });
+                  drupalgap_item_list_populate('#' + 'car_listing_' + nid, items);
+                }
+              }
+          });
           // Show buttons in right side bar.
-          html += '<div class="screen_sidebar_right">';
+          /*html += '<div class="screen_sidebar_right">';
           $.each(node.field_screen_links[node.language], function(delta, link) {
               html += theme('button_link', {
                   text: link.title,
@@ -185,8 +300,9 @@ function wh33lz_screen_pageshow(nid) {
                   }
               });
           });
-          html += '</div>';
-          $('#' + wh33lz_screen_page_container_id(nid)).html(html).trigger('create');
+          html += '</div>';*/
+          var container_id = wh33lz_screen_page_container_id(nid);
+          $('#' + container_id).html(html).trigger('create');
         }
     });
   }
